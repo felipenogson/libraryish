@@ -12,23 +12,30 @@
 </div>
 {% endblock %} 
 {% block main %} 
-<div class="row">
-  <div class="col-12">
-    <h3 class="mb-0" >Titulo del Libro</h3>
-    <h5>Author</h5>
+<span x-on:click=" window.history.back()"><i class="fas fa-arrow-left"></i> Go Back</span>
+
+<template x-for="book in myBooks">
+  <div>
+    <div class="row">
+      <div class="col-12">
+        <h5 class="mb-0" x-text="book.snippet.title"></h5>
+      </div>
+      <div class="col-5">
+        <img x-bind:src="book.snippet.thumbnail" alt="" class="img-fluid w-100">
+        <span class="badge badge-secondary bg-secondary w-100 p-2" x-text="book.snippet.hours + ' hours'"></span>
+      </div>
+      <div class="col-7">
+        <ul class="list-group">
+          <li class="list-group-item"><a x-bind:href="'/player/'+book.id " class="link-dark">Open AudioBook</a></li>
+          <li class="list-group-item">Download</li>
+          <li class="list-group-item">0% Read</li>
+          <li class="list-group-item bg-danger text-light" x-on:click="myBooks = myBooks.filter( b => b.id !== book.id)">Delete</li>
+
+        </ul>
+      </div>
+    </div>
+    <hr />
   </div>
-  <div class="col-5">
-    <img src="https://via.placeholder.com/350" alt="" class="img-fluid ">
-    <span class="badge badge-secondary bg-secondary w-100 p-2">6 Hours</span>
-  </div>
-  <div class="col-7">
-    <ul class="list-group">
-      <li class="list-group-item"><a href="{{ url_for('player') }}" class="link-dark">Open AudioBook</a></li>
-      <li class="list-group-item">Download</li>
-      <li class="list-group-item">0% Read</li>
-      
-    </ul>
-  </div>
-</div>
-<hr>
+</template>
+
 {% endblock %}

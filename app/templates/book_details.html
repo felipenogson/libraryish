@@ -1,7 +1,25 @@
 {%  extends 'base.html' %}
 
 {% block main %}
-<div class="container-fluid" id="book-details">
+<div class="container-fluid" id="book-details" x-data="{    newBook: { id: '{{ video_details['id']}}',
+																	snippet: {
+																		title: `{{ video_details['snippet']['title'] }}`,
+																		description: `{{ video_details['snippet']['description'] }}`,
+																		thumbnail: `{{ video_details['snippet']['thumbnails']['high']['url']}}`,
+																		duration: `{{ video_details['contentDetails']['duration'] }}`,
+																		hours: `{{ video_details['contentDetails']['hours']}} `
+																	}, 
+																	librarysh: {
+																		bookmarks: [],
+																		speed: '',
+																		readed: '',
+																	}
+																},
+															check_shelf(){
+																console.log(( myBooks.find(book => book.id === this.newBook.id) ? true : false ))
+																return ( myBooks.find(book => book.id === this.newBook.id) ? true : false )
+															}
+															}">
 	<div class="col-12 mb-3">
 		<a href="{{ url_for('index') }}" class="link-dark text-capitalize"><i class="fas fa-arrow-left"></i> Back to Home</a>
 	</div>
@@ -19,7 +37,10 @@
 				class="badge bg-secondary">{{tag}}</span> {% endfor %} </p>
 	</div>
 		<div class="col-12 justify-content-start mb-3">
-			<a class="btn btn-success btn-lg" style="background-color: #46DBC9;">Add to shelf</a>
+			<template x-if="!check_shelf()"><a class="btn btn-success btn-lg" style="background-color: #46DBC9;" x-on:click="myBooks.push(newBook); window.location.href=`{{url_for('shelf')}}`">Add to shelf</a></template>
+			<template x-if="check_shelf()">
+				<p> Great! this book is already in your shelf.</p>
+			</template>
 		</div>
 	<hr>
 		<div class="col">

@@ -46,12 +46,13 @@ def book_details(videoId):
 	items = objects[1]
 	
 	video_details = [ x for x in items if x['id'] == videoId][0]
+
 	return render_template('book_details.html', video_details=video_details)
 
 @app.route("/shelf")
 def shelf():
 	return render_template('shelf.html')
 
-@app.route("/player")
-def player():
-	return render_template('player.html')
+@app.route("/player/<videoId>")
+def player(videoId):
+	return render_template('player.html', videoId=videoId)
