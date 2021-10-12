@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+  <title>Libraryish</title>
+
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='/favicon/apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='/favicon/favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='/favicon/favicon-16x16.png') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='/favicon/site.webmanifest') }}">
+  <link rel="mask-icon" href="{{ url_for('static', filename='/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+  <!-- FontAwesome -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css'
+    integrity='sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=='
+    crossorigin='anonymous' />
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.4.2/cdn.min.js' 
+    integrity='sha512-Ggh9DYKMB04uOmJlra3yKB/Fk/mxjbehmixi/Jy+omCWFGNZEBwGkPz0+R+zgzZfGsHBGB8e4UsYedB32MJ/QQ==' 
+    crossorigin='anonymous'
+    defer></script>
+  
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }} ">
+</head>
+<body>
+  <div class="container-fluid main-container vh-100" 
+    x-data="{
+      newBook: {},
+      myBooks: JSON.parse(localStorage.getItem('myBooks') || '[]')
+    }"
+    x-init="$watch('myBooks', (val) => localStorage.setItem('myBooks', JSON.stringify(val)))"
+      >
+    {% block top %}
+    <div class="row">
+      <div class="col-6 d-flex justify-content-center"><a class="navbar-brand" id="brand-name" href="#">Welcome to <h3 class="display-4">LIBRARYISH</h3></a></div>
+      <div class="col-6"> <img src="{{ url_for('static', filename='./SVG/illustration-7.svg') }}" alt="Welcome" style="height:115px;"></div>
+    </div>
+    <hr>
+    {% endblock %}
+      {% block main %}
+      <div class="row">
+        <main class="flex-shrink-0 overflow-scroll">
+        </main>
+      </div>
+      {% endblock %}
+    <!-- Este row con py-5 es para que no tape el contenido el menu de abajo  -->
+    <div class="row py-5"> </div>
+    <footer class="footer mt-auto py-4 py-md-2 bg-dark fixed-bottom">
+      <div class="container-fluid text-center">
+        <ul class="navbar-nav d-flex flex-row justify-content-around text-light">
+          <li class="nav-item fs-2"><i class="fa fa-search" aria-hidden="true"></i></li>
+          <li class="nav-item fs-1"> <a href="{{ url_for('index') }}" class="link-light"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+          <li class="nav-item fs-2"><a href="{{ url_for('shelf') }}" class="link-light"><i class="fas fa-book" aria-hidden="true"></i></a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+  </script>
+  <!-- HTMX - Parece que este al final no lo voy a usar, mientras solo flask y alpinejs
+   <script src="https://unpkg.com/htmx.org@1.6.0"></script> -->
+</body>
+
+</html>

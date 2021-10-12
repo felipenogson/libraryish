@@ -1,0 +1,46 @@
+main>.container {
+	padding: 60px 15px 0;
+	margin-bottom: 5rem;
+  }
+
+  .sticky-nav {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+  }
+
+  .main-container{
+	  background-image: url('SVG/background.svg');
+	  background-repeat: no-repeat;
+	  background-size: 500px 500px;
+	  background-position: 30% 100%;
+  }
+
+  .card-img-overlay > p{
+	  text-shadow: 0px 0px 7px rgba(0, 0, 0, 1);
+  }
+  .card-img-top{
+	  filter: brightness(50%);
+  }
+
+  #brand-name{
+	  color: #46DBC9;
+	  text-shadow: 0px 0px 2px #FB5D64;
+  }
+
+ #book-details{
+	 background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('SVG/illustration-3.svg');
+	 background-repeat: no-repeat;
+	 background-size: 70% 70%;
+	 background-position: 100% 100%;
+	 background-attachment: fixed;
+ } 
+
+ .navbar-nav .dropdown-menu{
+	 position:absolute;
+ }
+
+ a{
+	 text-decoration: none;
+ }

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block top %} 
+<div class="row">
+  <div class="col-6 d-flex justify-content-center flex-column">
+    <a class="navbar-brand" id="brand-name" href="#">
+      <h3 class="display-5">LIBRARYISH</h3>
+    </a>
+    <h4 class="mb-0" style="color:#fb5d64;">Shelf:</h4>
+  </div>
+  <div class="col-6"> <img src="/static/./SVG/illustration-1.svg" alt="Welcome" style="height:75px;"></div>
+  <hr class="mt-0">
+</div>
+{% endblock %} 
+{% block main %} 
+<div class="row">
+  <div class="col-12">
+    <h3 class="mb-0" >Titulo del Libro</h3>
+    <h5>Author</h5>
+  </div>
+  <div class="col-5">
+    <img src="https://via.placeholder.com/350" alt="" class="img-fluid ">
+    <span class="badge badge-secondary bg-secondary w-100 p-2">6 Hours</span>
+  </div>
+  <div class="col-7">
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{{ url_for('player') }}" class="link-dark">Open AudioBook</a></li>
+      <li class="list-group-item">Download</li>
+      <li class="list-group-item">0% Read</li>
+      
+    </ul>
+  </div>
+</div>
+<hr>
+{% endblock %}

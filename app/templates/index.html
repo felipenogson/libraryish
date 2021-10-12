@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block main %} 
+
+<div class="row d-flex flex-row">
+
+  {% for item in items %}
+  <div class="col-6 justify-content-around mb-3 px-0">
+    
+    <div class="card p-1">
+
+      <a href="{{ url_for('book_details', videoId=item['id']) }}">
+        <div class="card-body p-0 mb-2">
+          <span class="badge w-100" style="background-color:#FB5D64;">{{ item['contentDetails']['hours']}} Hours</span>
+        </div>
+        <img src="{{ item['snippet']['thumbnails']['high']['url'] }}" class="img-fluid card-img-top" alt="..." style="min-width: 100px; min-height: 100px;">
+        <div class="card-img-overlay overflow-auto mt-4">
+          <p class="card-text text-light" style="line-height: 100%">{{item['snippet']['title'] }}</p>
+        </div>
+            </div>
+      </a>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}
