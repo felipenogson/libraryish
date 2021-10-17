@@ -12,8 +12,10 @@
 </div>
 {% endblock %} 
 {% block main %} 
-<span x-on:click=" window.history.back()"><i class="fas fa-arrow-left"></i> Go Back</span>
+<!-- <span x-on:click=" window.history.back()"><i class="fas fa-arrow-left"></i> Go Back</span> -->
 
+<!-- AlpiineJS again, this [for]  display all the books that are on our shelf and ads the delete button that take out the data from our shelf, our shelf is 
+synced with the localstorage from the base.html Alpinejs code -->
 <template x-for="book in myBooks">
   <div>
     <div class="row">
@@ -27,8 +29,8 @@
       <div class="col-7">
         <ul class="list-group">
           <li class="list-group-item"><a x-bind:href="'/player/'+book.id " class="link-dark">Open AudioBook</a></li>
-          <li class="list-group-item">Download</li>
-          <li class="list-group-item">0% Read</li>
+          <li class="list-group-item" x-text="book.libraryish.bookmarks.length + ' Bookmarks'"></li>
+          <li class="list-group-item" x-text="book.libraryish.percent + '% Read'"></li>
           <li class="list-group-item bg-danger text-light" x-on:click="myBooks = myBooks.filter( b => b.id !== book.id)">Delete</li>
 
         </ul>

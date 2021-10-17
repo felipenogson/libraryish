@@ -9,14 +9,14 @@
 																		duration: `{{ video_details['contentDetails']['duration'] }}`,
 																		hours: `{{ video_details['contentDetails']['hours']}} `
 																	}, 
-																	librarysh: {
+																	libraryish: {
 																		bookmarks: [],
 																		speed: '',
-																		readed: '',
+																		currentTime: 0,
+																		percent: 0,
 																	}
 																},
 															check_shelf(){
-																console.log(( myBooks.find(book => book.id === this.newBook.id) ? true : false ))
 																return ( myBooks.find(book => book.id === this.newBook.id) ? true : false )
 															}
 															}">

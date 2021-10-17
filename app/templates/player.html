@@ -1,70 +1,145 @@
 {% extends "base.html" %}
-{% block top %} 
-<div class="row">
-  <div class="col-6 d-flex justify-content-center flex-column">
-    <a class="navbar-brand" id="brand-name" href="#">
-      <h3 class="display-5">LIBRARYISH</h3>
-    </a>
-  </div>
-  <div class="col-6"> <img src="/static/./SVG/illustration-15.svg" alt="Welcome" style="height:75px;"></div>
-  <hr class="mt-0">
-</div>
-{% endblock %} 
 {% block main %} 
-<div class="row">
-  <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
-    <a href="{{ url_for('shelf') }}" class="navbar-brand"> <i class="fas fa-arrow-left"></i> Shelf</a>
-    <div class="navbar-nav d-flex flex-row fs-2">
-      <!-- <a class="nav-link" href="#"><i class="fa-solid fa-gauge-simple mx-3"></i></a> -->
-      <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="speedMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="fa-solid fa-gauge-simple fs-3"></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#">.75x</a></li>
-          <li><a class="dropdown-item" href="#">1x</a></li>
-          <li><a class="dropdown-item" href="#">1.25x</a></li>
-        </ul>
-      </div>
-      <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" id="speedMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="far fa-moon fs-3"></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#">15mins</a></li>
-          <li><a class="dropdown-item" href="#">30mins</a></li>
-          <li><a class="dropdown-item" href="#">1hr</a></li>
-        </ul>
-      </div>
-      <a class="nav-link p-0" href="#"><i class="far fa-bookmark mx-3"></i> </a>
+<!-- This are the functions and variables to control the player, it communicate with the player with customEvents -->
+<div class="div" x-data="{
+                          book: myBooks.filter( b => b.id === '{{videoId}}')[0],
+                          playing: 0, 
+                          currentTime: 0.0, 
+                          percent: 0,
+                          startVariables(){
+                            this.currentTime = player.getCurrentTime();
+                            this.playing= player.getPlayerState();
+                          },
+                          setPlaying(){
+                            this.playing = true;
+                            this.startTimer();
+                          },
+                          setStopping(){
+                            this.playing = false;
+                            this.stopTimer();
+                          },
+                          startTimer(){ 
+                            this.timer = setInterval( () => {
+                              this.currentTime = player.getCurrentTime();
+                              this.percent = Math.round((100/player.getDuration())*player.getCurrentTime());
+                              this.book.libraryish.percent = this.percent;
+                              this.book.libraryish.currentTime = this.currentTime;
+
+                              var index = myBooks.findIndex((o) => o.id === this.book.id);
+                              if(index !== -1){
+                                myBooks.splice(index, 1, this.book)
+                                localStorage.setItem('myBooks', JSON.stringify(myBooks))
+                              }
+                            }, 1000) },
+                          stopTimer(){ 
+                            this.currentTime = player.getCurrentTime();
+                            this.percent = Math.round((100/player.getDuration())*player.getCurrentTime())
+                            clearInterval(this.timer)},
+                          setBookmark(){
+                            this.book['libraryish']['bookmarks'].push({ comment: 'PlaceHolder for the bookmark', currentTime: this.currentTime})
+
+                            var index = myBooks.findIndex((o) => o.id === this.book.id);
+                            if(index !== -1){
+                              myBooks.splice(index, 1, this.book)
+                              localStorage.setItem('myBooks', JSON.stringify(myBooks))
+                            }
+                          },
+                          removeBookmark(currentTime){
+                            console.log(currentTime);
+                            var bookmarkIndex = this.book.libraryish.bookmarks.findIndex((o) => o.currentTime === currentTime)
+                            console.log(bookmarkIndex);
+                            if(bookmarkIndex !== -1){
+                              this.book.libraryish.bookmarks.splice(bookmarkIndex, 1)
+                            }
+                            var index = myBooks.findIndex((o) => o.id === this.book.id);
+                            if(index !== -1){
+                              myBooks.splice(index, 1, this.book)
+                              localStorage.setItem('myBooks', JSON.stringify(myBooks))
+                            }
+
+                          }
+
+                        }" 
+    @started.window="startVariables()" @playing.window="setPlaying()" @stoping.window="setStopping()">
+  <div class="row justify-content-center">
+    <div class="col-8 ratio ratio-4x3" style="max-width: 400px">
+      <div id="player" ></div>
     </div>
   </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-8 ratio ratio-4x3" style="max-width: 400px">
-    <iframe src="https://www.youtube.com/embed/{{ videoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div class="row">
+    <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-end">
+      <div class="navbar-nav d-flex flex-row fs-2">
+        <a class="nav-link p-0" href="#" x-on:click="setBookmark()"><i class="far fa-bookmark mx-3"></i> </a>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row mt-5">
-  <div class="col-9  d-flex justify-content-around">
-    <span class="d-flex align-content-center px-1"><i class="fa-solid fa-backward fs-1"></i>15s</span> <span><i class="fa-solid fa-play fs-1"></i></span> <span class="d-flex align-content-center"> 15s<i class="fa-solid fa-forward fs-1 px-1"></i></span>
+  <div class="row">
+    <div class="col-9  d-flex justify-content-around">
+      <span class="d-flex align-content-center px-1" x-on:click="player.seekTo(player.getCurrentTime() - 15) "><i class="fa-solid fa-backward fs-1"></i>15s</span>
+
+      <span x-show="!playing" x-on:click="player.playVideo()" ><i class="fa-solid fa-play fs-1"></i></span>
+      <span x-show="playing" x-on:click="player.pauseVideo()"><i class="fa-solid fa-pause fs-1"></i></span>
+
+      <span class="d-flex align-content-center" x-on:click="player.seekTo(player.getCurrentTime() + 15) "> 15s<i class="fa-solid fa-forward fs-1 px-1"></i></span>
+    </div>
+
+    <div class="col-3">
+      <h5 x-text="percent + ' %'"></h5>
+    </div>
   </div>
-  <div class="col-3">
-    <h5>30%</h5>
-  </div>
-</div>
-<hr>
-<h5>Bookmarks:</h5>
-<div class="alert alert-info alert-dismissible fade show my-1" role="alert">
-  <strong><i class="far fa-bookmark mx-3"></i></strong> Title of the bookmark <span class="fst-italic">1h25m13s</span>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<div class="alert alert-info alert-dismissible fade show my-1" role="alert">
-  <strong><i class="far fa-bookmark mx-3"></i></strong> Title of the bookmark <span class="fst-italic">1h25m13s</span>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<div class="alert alert-info alert-dismissible fade show my-1" role="alert">
-  <strong><i class="far fa-bookmark mx-3"></i></strong> Title of the bookmark <span class="fst-italic">1h25m13s</span>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <hr>
+  <h5>Bookmarks:</h5>
+  <template x-for="bookmark in book.libraryish.bookmarks">
+    <div class="alert alert-info alert-dismissible fade show my-1" role="alert" >
+
+      <span x-on:click="player.seekTo(bookmark.currentTime)"><strong><i class="far fa-bookmark mx-3"></i></strong> <span x-text="bookmark.comment">Title of the bookmark</span> <span class="fst-italic" x-text="bookmark.currentTime">1h25m13s</span></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" x-on:click="removeBookmark(bookmark.currentTime)"></button>
+    </div>
+  </template>
+
+  <script>
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '200',
+        videoId: '{{ videoId }}',
+        playerVars: {
+          'playsinline': 0,
+          'controls': 1,
+          'showinfo': 0,
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+
+      console.log('saliendo evento');
+      window.dispatchEvent(new CustomEvent('started'));
+      event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+      playerStatus = event.data
+      if (event.data == YT.PlayerState.PLAYING) {
+        window.dispatchEvent(new CustomEvent('playing'));
+      }
+      else{
+        window.dispatchEvent(new CustomEvent('stoping'));
+      }
+    }
+
+    function stopVideo() {
+      player.stopVideo();
+    }
+  </script>
 </div>
 {% endblock %}
