@@ -38,9 +38,10 @@
 	</div>
 		<div class="col-12 justify-content-start mb-3">
 			<template x-if="!check_shelf()"><a class="btn btn-success btn-lg" style="background-color: #46DBC9;" x-on:click="myBooks.push(newBook); window.location.href=`{{url_for('shelf')}}`">Add to shelf</a></template>
-			<template x-if="check_shelf()">
+			<template x-if="check_shelf()"><a x-bind:href="'/player/'+newBook.id" class="btn btn-success btn-lg" style="background-color: #FB5D64;">Read Now</a></template>
+			<!-- <template x-if="check_shelf()">
 				<p> Great! this book is already in your shelf.</p>
-			</template>
+			</template> -->
 		</div>
 	<hr>
 		<div class="col">

@@ -23,12 +23,14 @@ synced with the localstorage from the base.html Alpinejs code -->
         <h5 class="mb-0" x-text="book.snippet.title"></h5>
       </div>
       <div class="col-5">
-        <img x-bind:src="book.snippet.thumbnail" alt="" class="img-fluid w-100">
-        <span class="badge badge-secondary bg-secondary w-100 p-2" x-text="book.snippet.hours + ' hours'"></span>
+        <a x-bind:href="'/book_details/'+book.id">
+          <img x-bind:src="book.snippet.thumbnail" alt="" class="img-fluid w-100">
+          <span class="badge badge-secondary bg-secondary w-100 p-2" x-text="book.snippet.hours + ' hours'"></span>
+        </a>
       </div>
       <div class="col-7">
         <ul class="list-group">
-          <li class="list-group-item"><a x-bind:href="'/player/'+book.id " class="link-dark">Open AudioBook</a></li>
+          <li class="list-group-item"><a x-bind:href="'/player/'+book.id" class="link-dark">Open AudioBook</a></li>
           <li class="list-group-item" x-text="book.libraryish.bookmarks.length + ' Bookmarks'"></li>
           <li class="list-group-item" x-text="book.libraryish.percent + '% Read'"></li>
           <li class="list-group-item bg-danger text-light" x-on:click="myBooks = myBooks.filter( b => b.id !== book.id)">Delete</li>
