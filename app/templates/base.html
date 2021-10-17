@@ -36,6 +36,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }} ">
 </head>
 <body>
+
+  <!-- Here we start using AlpineJS with this code we sync our data with the browser localstorage (thanks to hugo for the snippet https://codewithhugo.com/alpinejs-localstorage-sessionstorage/)-->
   <div class="container-fluid main-container vh-100" 
     x-data="{
       newBook: {},
@@ -43,6 +45,7 @@
     }"
     x-init="$watch('myBooks', (val) => localStorage.setItem('myBooks', JSON.stringify(val)))"
       >
+
     {% block top %}
     <div class="row">
       <div class="col-6 d-flex justify-content-center"><a class="navbar-brand" id="brand-name" href="#">Welcome to <h3 class="display-4">LIBRARYISH</h3></a></div>
